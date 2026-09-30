@@ -191,10 +191,10 @@ public class DrivetrainSubsystem {
 
         // Set directions (Matching the WORKING PinpointPathAuto configuration)
         // Left is FORWARD, Right is REVERSE
-        FrontLeft.setDirection(DcMotor.Direction.FORWARD);
-        RearLeft.setDirection(DcMotor.Direction.FORWARD);
-        FrontRight.setDirection(DcMotor.Direction.REVERSE);
-        RearRight.setDirection(DcMotor.Direction.REVERSE);
+        FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        RearLeft.setDirection(DcMotor.Direction.REVERSE);
+        FrontRight.setDirection(DcMotor.Direction.FORWARD);
+        RearRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motors
         DcMotor[] driveMotors = {FrontLeft, RearLeft, FrontRight, RearRight};

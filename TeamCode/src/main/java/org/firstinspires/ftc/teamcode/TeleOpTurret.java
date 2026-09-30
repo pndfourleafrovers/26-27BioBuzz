@@ -13,27 +13,26 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import org.firstinspires.ftc.teamcode.subsystems.AprilTagWebcam;
+//import org.firstinspires.ftc.teamcode.subsystems.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.subsystems.DrivetrainSubsystem;
 
 //import org.firstinspires.ftc.teamcode.subsystems.LauncherSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.LauncherSubsystemRookieBot;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
+//import org.firstinspires.ftc.teamcode.subsystems.LauncherSubsystemRookieBot;
+//import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 //odometry IMU
-@TeleOp(name = "TeleOpTurret", group = "TeleOp")
-@Disabled
+@TeleOp(name = "TeleOpParallel", group = "TeleOp")
 @Configurable
 public class TeleOpTurret extends LinearOpMode {
     //Declares DrivetrainSubsystem to handle motor functions
     private DrivetrainSubsystem drivetrain = null;
-     private AprilTagWebcam aprilTagWebcam;
+    //private AprilTagWebcam aprilTagWebcam;
 
     private TelemetryManager panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-    private LauncherSubsystemRookieBot launcherSubsystemRookieBot;
+    //private LauncherSubsystemRookieBot launcherSubsystemRookieBot;
     //private AprilTagWebcam aprilTagWebcam;
-    private TurretSubsystem turretSubsystem;
-    private double turretPos = TurretSubsystem.CENTER_POSITION;
+    //private TurretSubsystem turretSubsystem;
+    //private double turretPos = TurretSubsystem.CENTER_POSITION;
     //------------------------------Variables----------------------------
     //initializes variables
     private boolean slowMode = false;
@@ -66,13 +65,11 @@ public class TeleOpTurret extends LinearOpMode {
 
 
         drivetrain = new DrivetrainSubsystem(hardwareMap); //defines name, rotation and brake
-        launcherSubsystemRookieBot = new LauncherSubsystemRookieBot(hardwareMap);
+        //launcherSubsystemRookieBot = new LauncherSubsystemRookieBot(hardwareMap);
 
         // TurretSubsystem now owns the servos and centers the turret in its constructor.
-        turretSubsystem = new TurretSubsystem(hardwareMap);
+        //turretSubsystem = new TurretSubsystem(hardwareMap);
 
-        aprilTagWebcam = new AprilTagWebcam();
-        aprilTagWebcam.init(hardwareMap, telemetry);
 
         //Start Encoder
         //Drive
@@ -84,7 +81,7 @@ public class TeleOpTurret extends LinearOpMode {
         //panelsTelemetry.update();
         //for (int i = 0; i < veloHistory.length; i++) veloHistory[i] = nearestBase * 30.48;
         waitForStart();
-        launcherSubsystemRookieBot.setHatchVelocity(0);
+        //launcherSubsystemRookieBot.setHatchVelocity(0);
 
 
         // run until the end of the match (driver presses STOP)
@@ -99,50 +96,9 @@ public class TeleOpTurret extends LinearOpMode {
             double lateral = gamepad1.left_stick_x;
             double yaw = -gamepad1.right_stick_x;
 
-            //AutoAim
-            //update odometry location
-            aprilTagWebcam.update();
-            AprilTagDetection targetTag = aprilTagWebcam.getTagBySpecificId(20); //blue = 20,red = 24
 
 
-            //------------------Aims when left bumper is pressed down--------------
-            if (gamepad1.left_bumper) {
-                if (targetTag != null && targetTag.ftcPose != null) {
-                    double bearingError = targetTag.ftcPose.bearing - blueBearingOffset;
-                     if (Math.abs(bearingError) > aimDeadband) {
-                         turretPos += turretAimKP * bearingError;
-                         turretSubsystem.setTurretPosition(turretPos);
-                         turretPos = turretSubsystem.getFrontPosition();
-                    }
 
-                    telemetry.addData("Locked", "ID: %d, Bearing Error: %.2f pos %.3f",
-                            targetTag.id, bearingError, turretPos);
-
-                } else {
-                    telemetry.addData("Not Locked", "Searching for Blue Goal");
-                }
-            }
-
-
-            //Tuning Bearing
-            /*
-            if (gamepad1.dpadRightWasPressed()) {
-                bearingOffset += 0.05;}
-
-            if (gamepad1.dpadLeftWasPressed())  {
-               bearingOffset -= 0.05;
-            }
-*/
-            /*
-            //If tuning does not work, activate this code and comment the code out above.
-                        if (gamepad1.dpad_right) {
-                bearingOffset += 0.05;
-            }
-
-            if (gamepad1.dpad_left)  {
-                bearingOffset -= 0.05;
-            }
-             */
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
@@ -176,159 +132,16 @@ public class TeleOpTurret extends LinearOpMode {
             leftBackPower /= max;
             rightBackPower /= max;
 
-           /* if (gamepad1.left_bumper) {
-                if (!slowMode) {
-                    slowMode = true;
-                    powerMultiplier = odoSlowSpeedMultiple; // was 0.3, 0.2
-                }
-            } else {
-                if (slowMode) {
-                    slowMode = false;
-                    powerMultiplier = 1.0;
-                }
-            } */
+
 
             drivetrain.setMotorPower(leftFrontPower * powerMultiplier, rightFrontPower * powerMultiplier, leftBackPower * powerMultiplier, rightBackPower * powerMultiplier);
 
-           /* if (gamepad1.aWasPressed()){
-                launcherSubsystemRookieBot.setHatchVelocity(intakeAsstToggle ? 1.0:0.0);
-                intakeAsstToggle = !intakeAsstToggle;
-            } */
 
-          /*  if (gamepad1.right_trigger > 0) {
-               launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                //outTakeTimer.reset();
-            } else if (gamepad1.right_trigger == 0) {
-                launcherSubsystemRookieBot.setIntakeVelocity(0);
-            } */
-            /*
-            if (gamepad1.right_bumper == true) {
-                launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-            }
-            */
-                //else if (gamepad1.left_trigger > 0) {
-                // Intake Out
-                //launcherSubsystemRookieBot.setIntakeVelocity(OUTTAKE_VELOCITY);
-                //IntakeAsst.setPower(0);
-                //}
-
-           /* else if (burstShotsRemaining > 0) {
-                launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-            } else if (outTakeTimer.seconds() < OUTTAKE_TIME) {
-                launcherSubsystemRookieBot.setIntakeVelocity(OUTTAKE_VELOCITY);
-            } else {
-                // Stop everything
-                launcherSubsystemRookieBot.setIntakeVelocity(0);
-                //IntakeAsst.setPower(0);
-            } */
-
-//----------------------------------------------------GAMEPAD-2-------------------------
-           /*  if(gamepad2.aWasPressed()){
-                burstShotsRemaining = 3;
-                burstLaunchTimer.reset();
-                burstFeeding = false;
-                launcherSubsystem.setIntakeAsstPower(1.0);
-                intakeAsstToggle = true;
-                launcherSubsystem.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-            }
-
-            if(burstShotsRemaining > 0){
-                if(!burstFeeding){
-                    if(launcherSubsystem.getLauncherVelocity() >= minVelocity && burstLaunchTimer.seconds() > TIME_BETWEEN_SHOTS){
-                        launcherSubsystem.setLauncherVelocity(autoLaunchPower);
-                        launcherSubsystem.liftUp();
-                        burstFeederTimer.reset();
-                        burstFeeding = true;
-                    }
-                } else{
-                    if (burstFeederTimer.seconds()>LIFT_TIME){
-                        launcherSubsystem.liftDown();
-                        burstShotsRemaining--;
-                        burstLaunchTimer.reset();
-                        burstFeeding = false;
-                        if(burstShotsRemaining == 0){
-                            launcherSubsystem.setIntakeVelocity(0);
-                        }
-                    }
-                }
-            } */
-/*
-            if (gamepad2.x) {
-                hatchTimer.reset();
-                launcherSubsystemRookieBot.setHatchVelocity(HATCH_VELOCITY);
-            } else if (hatchTimer.milliseconds() > 2000) {
-                launcherSubsystemRookieBot.setHatchVelocity(0);
-            }
-*/
-               /* if (gamepad1.x) {
-                    launcherSubsystemRookieBot.setHatchVelocity(HATCH_VELOCITY);
-                  // launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                } else {
-                    launcherSubsystemRookieBot.setHatchVelocity(0);
-                    //launcherSubsystemRookieBot.setIntakeVelocity(0);
-                } */
 
                 double distanceFeet = -1;
 
-              /*  if (gamepad1.x || gamepad1.right_trigger > 0.5) {
-                    launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                } else if (gamepad1.right_trigger > 0.5) {
-                    launcherSubsystemRookieBot.setHatchVelocity(SLOW_HATCH_VELOCITY);
-                } else {
-                    launcherSubsystemRookieBot.setIntakeVelocity(0);
-                } */
-
-                if (gamepad1.x) {
-                    launcherSubsystemRookieBot.setHatchVelocity(HATCH_VELOCITY);
-                    launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                } else if (gamepad1.right_trigger > 0.5) {
-                    launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                    launcherSubsystemRookieBot.setHatchVelocity(SLOW_HATCH_VELOCITY);
-                } else {
-                    launcherSubsystemRookieBot.setIntakeVelocity(0);
-                    launcherSubsystemRookieBot.setHatchVelocity(0);
-                }
-
-          /*  if (gamepad2.left_trigger > 0 && burstShotsRemaining == 0) {
-                //looks for april tag, smooths range reading, converts to feet
-                if (targetTag != null && targetTag.ftcPose != null) {
-                    veloHistory[veloIndex] = targetTag.ftcPose.range;
-                    veloIndex = (veloIndex + 1) % 5;
-                    double smoothedRange = 0;
-                    for (int i = 0; i < 5; i++) smoothedRange += veloHistory[i];
-                    smoothedRange /= 5;
-                    distanceFeet = smoothedRange / 30.48;
-                }
-                //If distance - finds percentage of distance and then scales the power by adding to close(base)
-                autoLaunchPower = (!manualPowerOverride && distanceFeet >= 0) ? TELE_CLOSE_LAUNCH + (distanceFeet - nearestBase) / (farthestBase - nearestBase) * (FAR_LAUNCH_POWER - TELE_CLOSE_LAUNCH) : LaunchPower;
-*/
-
-                /*if (!manualPowerOverride && distanceFeet >= 0) {
-                    double t = Math.sqrt((distanceFeet - nearestBase) / (farthestBase - nearestBase));
-                    autoLaunchPower = TELE_CLOSE_LAUNCH + t * (FAR_LAUNCH_POWER - TELE_CLOSE_LAUNCH);
-                } else {
-                    autoLaunchPower = LaunchPower;
-                }
-                 */
 
 
-                //compares calculated power with max power. sets to lower number
-
-
-                //  double t = Math.sqrt((distanceFeet - nearestBase) / (farthestBase - nearestBase));
-                //  autoLaunchPower = TELE_CLOSE_LAUNCH + t * (FAR_LAUNCH_POWER - TELE_CLOSE_LAUNCH);
-
-           /* } else {
-                if (burstShotsRemaining == 0) {
-                    launcherSubsystemRookieBot.setLauncherVelocity(0);
-                }
-            } */
-
-                if (gamepad2.left_trigger > 0) {
-                    launcherSubsystemRookieBot.setLauncherVelocity(LaunchPower);
-                } else {
-                    launcherSubsystemRookieBot.setLauncherVelocity(0);
-                }
 
                 if (gamepad2.dpad_up) {//FAR
                     LaunchPower = FAR_LAUNCH_POWER;//was 1500, then 1410, 1300
@@ -347,14 +160,14 @@ public class TeleOpTurret extends LinearOpMode {
 //---------------------------------------------------------Telemetry-------------------------------
                 //Figure RPM
                 //Launcher
-                double launcherVelocity = launcherSubsystemRookieBot.getLauncherVelocity();
-                double launchAsstVelocity = launcherSubsystemRookieBot.getLaunchAsstVelocity();
-                double intakeVelocity = launcherSubsystemRookieBot.getIntakeVelocity();
+                //double launcherVelocity = launcherSubsystemRookieBot.getLauncherVelocity();
+                //double launchAsstVelocity = launcherSubsystemRookieBot.getLaunchAsstVelocity();
+                //double intakeVelocity = launcherSubsystemRookieBot.getIntakeVelocity();
                 //Launcher
-                double launcherPRM = (launcherVelocity / TICKS_PER_REV) * 60;
-                double launchAsstRPM = (launchAsstVelocity / TICKS_PER_REV) * 60;
+                //double launcherPRM = (launcherVelocity / TICKS_PER_REV) * 60;
+                //double launchAsstRPM = (launchAsstVelocity / TICKS_PER_REV) * 60;
                 //Intake
-                double intakeRPM = (intakeVelocity / TICKS_PER_REV) * 60;
+                //double intakeRPM = (intakeVelocity / TICKS_PER_REV) * 60;
 
 
                 //Raw Speed
@@ -364,8 +177,8 @@ public class TeleOpTurret extends LinearOpMode {
                 //telemetry.addData("Goal Distance Feet","%2f",distanceFeet == -1 ? 0.0:distanceFeet);
                 telemetry.addData("Auto Launch Power", "%2f", autoLaunchPower);
                 telemetry.addData("Manual Override", manualPowerOverride ? "ON" : "OFF");
-                telemetry.addData("Launcher", "%2f", launcherVelocity);
-                telemetry.addData("Launch Asst", "%2f", launchAsstVelocity);
+                //telemetry.addData("Launcher", "%2f", launcherVelocity);
+                //telemetry.addData("Launch Asst", "%2f", launchAsstVelocity);
                 //panelsTelemetry.addData("Launcher Velocity", launcherVelocity);
                 //panelsTelemetry.addData("Launch Asst Velocity", launchAsstVelocity);
                 //Intake
@@ -375,10 +188,10 @@ public class TeleOpTurret extends LinearOpMode {
                 //Drive
                 telemetry.addData("-----RPM----", "");
                 //Launcher
-                telemetry.addData("Launcher RPM", "%2f", launcherPRM);
-                telemetry.addData("Launch Asst RPM", "%2f", launchAsstRPM);
+                //telemetry.addData("Launcher RPM", "%2f", launcherPRM);
+                //telemetry.addData("Launch Asst RPM", "%2f", launchAsstRPM);
                 //Intake
-                telemetry.addData("Actual Intake Velocity", "%2f", launcherSubsystemRookieBot.getIntakeVelocity());
+                //telemetry.addData("Actual Intake Velocity", "%2f", launcherSubsystemRookieBot.getIntakeVelocity());
                 telemetry.addData("Expected Intake Velocity", INTAKE_TARGET_VELOCITY);
                 telemetry.update();
                 //panelsTelemetry.update();

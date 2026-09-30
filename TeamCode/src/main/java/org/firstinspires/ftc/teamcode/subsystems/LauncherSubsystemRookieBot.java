@@ -10,10 +10,13 @@ import static org.firstinspires.ftc.teamcode.subsystems.Constants.launchP;
 //import static org.firstinspires.ftc.teamcode.subsystems.Constants.liftDown;
 //import static org.firstinspires.ftc.teamcode.subsystems.Constants.liftUp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
+@Disabled
 
 public class LauncherSubsystemRookieBot {
 

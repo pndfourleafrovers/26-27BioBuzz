@@ -9,9 +9,12 @@ midpoint 150 deg = position 0.50.
 
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+
+@Disabled
 public class TurretSubsystem {
 
     /** Result of a closed-loop aim step. */
