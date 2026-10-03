@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 //odometry IMU
 @TeleOp(name = "TeleOpTest", group = "TeleOp")
 @Configurable
+@Disabled
 public class TeleOpTest extends LinearOpMode {
     //Declares DrivetrainSubsystem to handle motor functions
     private DrivetrainSubsystem drivetrain = null;
@@ -64,7 +65,7 @@ public class TeleOpTest extends LinearOpMode {
 
 
         drivetrain = new DrivetrainSubsystem(hardwareMap); //defines name, rotation and brake
-        launcherSubsystemRookieBot = new LauncherSubsystemRookieBot(hardwareMap);
+        //launcherSubsystemRookieBot = new LauncherSubsystemRookieBot(hardwareMap);
 
         // TurretSubsystem now owns the servos and centers the turret in its constructor.
         turretSubsystem = new TurretSubsystem(hardwareMap);
@@ -82,7 +83,7 @@ public class TeleOpTest extends LinearOpMode {
         //panelsTelemetry.update();
         //for (int i = 0; i < veloHistory.length; i++) veloHistory[i] = nearestBase * 30.48;
         waitForStart();
-        launcherSubsystemRookieBot.setHatchVelocity(0);
+        //launcherSubsystemRookieBot.setHatchVelocity(0);
 
 
         // run until the end of the match (driver presses STOP)
@@ -104,7 +105,7 @@ public class TeleOpTest extends LinearOpMode {
 
 
             //------------------Aims when left bumper is pressed down--------------
-            if (gamepad1.left_bumper) {
+           /* if (gamepad1.left_bumper) {
                 if (targetTag != null && targetTag.ftcPose != null) {
                     double bearingError = targetTag.ftcPose.bearing - blueBearingOffset;
                     if (Math.abs(bearingError) > aimDeadband) {
@@ -119,7 +120,7 @@ public class TeleOpTest extends LinearOpMode {
                 } else {
                     telemetry.addData("Not Locked", "Searching for Blue Goal");
                 }
-            }
+            } */
 
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
@@ -161,15 +162,15 @@ public class TeleOpTest extends LinearOpMode {
 
             double distanceFeet = -1;
 
-
+/*
             if (gamepad1.x) {
                 launcherSubsystemRookieBot.setHatchVelocity(HATCH_VELOCITY);
-                launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
+                //launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
             } else if (gamepad1.right_trigger > 0.5) {
-                launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
+                //launcherSubsystemRookieBot.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
                 launcherSubsystemRookieBot.setHatchVelocity(SLOW_HATCH_VELOCITY);
             } else {
-                launcherSubsystemRookieBot.setIntakeVelocity(0);
+                //launcherSubsystemRookieBot.setIntakeVelocity(0);
                 launcherSubsystemRookieBot.setHatchVelocity(0);
             }
 
@@ -190,21 +191,21 @@ public class TeleOpTest extends LinearOpMode {
                 LaunchPower = TELE_CLOSE_LAUNCH;//Was 1225
                 minVelocity = TELE_CLOSE_MIN_LAUNCH;//was 1175, 1060
             }
-
+*/
             if (gamepad2.yWasPressed()) {
                 manualPowerOverride = !manualPowerOverride;
             }
 //---------------------------------------------------------Telemetry-------------------------------
             //Figure RPM
             //Launcher
-            double launcherVelocity = launcherSubsystemRookieBot.getLauncherVelocity();
-            double launchAsstVelocity = launcherSubsystemRookieBot.getLaunchAsstVelocity();
-            double intakeVelocity = launcherSubsystemRookieBot.getIntakeVelocity();
+            //double launcherVelocity = launcherSubsystemRookieBot.getLauncherVelocity();
+            //double launchAsstVelocity = launcherSubsystemRookieBot.getLaunchAsstVelocity();
+            //double intakeVelocity = launcherSubsystemRookieBot.getIntakeVelocity();
             //Launcher
-            double launcherPRM = (launcherVelocity / TICKS_PER_REV) * 60;
-            double launchAsstRPM = (launchAsstVelocity / TICKS_PER_REV) * 60;
+            //double launcherPRM = (launcherVelocity / TICKS_PER_REV) * 60;
+            //double launchAsstRPM = (launchAsstVelocity / TICKS_PER_REV) * 60;
             //Intake
-            double intakeRPM = (intakeVelocity / TICKS_PER_REV) * 60;
+            //double intakeRPM = (intakeVelocity / TICKS_PER_REV) * 60;
 
 
             //Raw Speed
@@ -214,8 +215,8 @@ public class TeleOpTest extends LinearOpMode {
             //telemetry.addData("Goal Distance Feet","%2f",distanceFeet == -1 ? 0.0:distanceFeet);
             telemetry.addData("Auto Launch Power", "%2f", autoLaunchPower);
             telemetry.addData("Manual Override", manualPowerOverride ? "ON" : "OFF");
-            telemetry.addData("Launcher", "%2f", launcherVelocity);
-            telemetry.addData("Launch Asst", "%2f", launchAsstVelocity);
+            //telemetry.addData("Launcher", "%2f", launcherVelocity);
+            //telemetry.addData("Launch Asst", "%2f", launchAsstVelocity);
             //panelsTelemetry.addData("Launcher Velocity", launcherVelocity);
             //panelsTelemetry.addData("Launch Asst Velocity", launchAsstVelocity);
             //Intake
@@ -225,11 +226,11 @@ public class TeleOpTest extends LinearOpMode {
             //Drive
             telemetry.addData("-----RPM----", "");
             //Launcher
-            telemetry.addData("Launcher RPM", "%2f", launcherPRM);
-            telemetry.addData("Launch Asst RPM", "%2f", launchAsstRPM);
+            //telemetry.addData("Launcher RPM", "%2f", launcherPRM);
+            //telemetry.addData("Launch Asst RPM", "%2f", launchAsstRPM);
             //Intake
-            telemetry.addData("Actual Intake Velocity", "%2f", launcherSubsystemRookieBot.getIntakeVelocity());
-            telemetry.addData("Expected Intake Velocity", INTAKE_TARGET_VELOCITY);
+            //telemetry.addData("Actual Intake Velocity", "%2f", launcherSubsystemRookieBot.getIntakeVelocity());
+            //telemetry.addData("Expected Intake Velocity", INTAKE_TARGET_VELOCITY);
             telemetry.update();
             //panelsTelemetry.update();
 

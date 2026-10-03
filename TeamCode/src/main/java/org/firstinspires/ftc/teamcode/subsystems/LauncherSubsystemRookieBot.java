@@ -22,37 +22,37 @@ public class LauncherSubsystemRookieBot {
 
     private DcMotorEx launcher;
     private DcMotorEx launchAsst;
-    private DcMotorEx intake;
-    private DcMotorEx hatch;
+    //private DcMotorEx intake;
+    //private DcMotorEx hatch;
     // NOTE: The turret servos (ServoFront/ServoBack) are owned by TurretSubsystem, not here.
 
-    public LauncherSubsystemRookieBot(HardwareMap hardwareMap) {
-        intake = hardwareMap.get(DcMotorEx.class, "Intake");
-        hatch = hardwareMap.get(DcMotorEx.class, "Hatch");
-        launcher = hardwareMap.get(DcMotorEx.class, "Launcher");
-        launchAsst = hardwareMap.get(DcMotorEx.class, "LaunchAsst");
+    /*public LauncherSubsystemRookieBot(HardwareMap hardwareMap) {
+        //intake = hardwareMap.get(DcMotorEx.class, "Intake");
+        //hatch = hardwareMap.get(DcMotorEx.class, "Hatch");
+        //launcher = hardwareMap.get(DcMotorEx.class, "Launcher");
+        //launchAsst = hardwareMap.get(DcMotorEx.class, "LaunchAsst");
 
         launcher.setDirection(DcMotorEx.Direction.FORWARD);
         launchAsst.setDirection(DcMotorEx.Direction.REVERSE);
-        intake.setDirection(DcMotor.Direction.FORWARD);
-        hatch.setDirection(DcMotor.Direction.REVERSE);
+        //intake.setDirection(DcMotor.Direction.FORWARD);
+        //hatch.setDirection(DcMotor.Direction.REVERSE);
 
 
 
         launcher.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         launchAsst.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hatch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         launcher.setZeroPowerBehavior(BRAKE);
         launchAsst.setZeroPowerBehavior(BRAKE);
-        intake.setZeroPowerBehavior(BRAKE);
+        //intake.setZeroPowerBehavior(BRAKE);
         hatch.setZeroPowerBehavior(BRAKE);
 
         launcher.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         launchAsst.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hatch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
@@ -77,28 +77,30 @@ public class LauncherSubsystemRookieBot {
     public boolean isCloseLauncherReady() {
         return launcher.getVelocity() >= CLOSE_MIN_VELOCITY;
     }
-    public void setIntakeVelocity(double velocity) {
-        intake.setVelocity(velocity);
-    }
 
+     */
+    /*public void setIntakeVelocity(double velocity) {
+        intake.setVelocity(velocity);
+    }*/
+/*
     public void setHatchVelocity(double velocity) {
         hatch.setVelocity(velocity);
     }
+*/
 
-
-    public double getIntakeVelocity() {
+    /*public double getIntakeVelocity() {
         return intake.getVelocity();
-    }
-
+    }*/
+/*
     public double getLaunchAsstVelocity() {
         return launchAsst.getVelocity();
     }
-
+*/
 
     public void stopAll() {
-        launcher.setVelocity(0);
-        launchAsst.setVelocity(0);
-        intake.setVelocity(0);
-        hatch.setVelocity(0);
+        //launcher.setVelocity(0);
+        //launchAsst.setVelocity(0);
+        //intake.setVelocity(0);
+        //hatch.setVelocity(0);
     }
 }

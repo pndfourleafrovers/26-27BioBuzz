@@ -6,12 +6,9 @@ import static org.firstinspires.ftc.teamcode.subsystems.Constants.*;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 //import org.firstinspires.ftc.teamcode.subsystems.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.subsystems.DrivetrainSubsystem;
@@ -23,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DrivetrainSubsystem;
 //odometry IMU
 @TeleOp(name = "TeleOpParallel", group = "TeleOp")
 @Configurable
-public class TeleOpTurret extends LinearOpMode {
+public class TeleOpParallel extends LinearOpMode {
     //Declares DrivetrainSubsystem to handle motor functions
     private DrivetrainSubsystem drivetrain = null;
     //private AprilTagWebcam aprilTagWebcam;

@@ -23,8 +23,7 @@ Pick up 1
 shoot
  */
 
-@Autonomous(name="Red Far 1", group="Red Far")
-@Disabled
+@Autonomous(name="Red", group="Red Far")
 
 
 public class RedFarOneLine extends OpMode {
@@ -47,7 +46,9 @@ public class RedFarOneLine extends OpMode {
 
     private enum AutoState {
         POWER_UP,
-        SHOOT_ALIGN,
+        FORWARD,
+        STRAFE,
+        PARK,
         SHOOT,
         SHOT_COUNT,
 
@@ -105,13 +106,13 @@ public class RedFarOneLine extends OpMode {
                 GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.recalibrateIMU();
 
-        pinpoint.setPosition(new Pose2D(DistanceUnit.MM, RED_FAR_START_X, RED_FAR_START_Y, AngleUnit.DEGREES, RED_FAR_START_H));
+        pinpoint.setPosition(new Pose2D(DistanceUnit.MM, RedStartX, RedStartY, AngleUnit.DEGREES, RedStartH));
         pinpoint.update();
 
-        autoState = AutoState.POWER_UP;
-        returnState = AutoState.ROW1_TURN_TO_ARTIFACTS;
+        autoState = AutoState.FORWARD;
+        //returnState = AutoState.FORWARD;
 
-        launcherSubsystem = new LauncherSubsystemRookieBot(hardwareMap);
+        //launcherSubsystem = new LauncherSubsystemRookieBot(hardwareMap);
     }
 
     @Override
@@ -120,18 +121,18 @@ public class RedFarOneLine extends OpMode {
         pinpoint.update();
 
         Pose2D pos = pinpoint.getPosition();
-        double goalHeading = autoDrive.getHeadingToGoal(pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), RED_GOAL_X, RED_GOAL_Y);
+       // double goalHeading = autoDrive.getHeadingToGoal(pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), RED_GOAL_X, RED_GOAL_Y);
         telemetry.addData("Status", "Initialized - PUSH TO TEST");
         telemetry.addData("X (mm) Front-Back", "%.1f", pos.getX(DistanceUnit.MM));
         telemetry.addData("Y (mm) Left-Right", "%.1f", pos.getY(DistanceUnit.MM));
         telemetry.addData("H (deg)", "%.1f", pos.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("Goal Heading", "%.1f", goalHeading);
+       // telemetry.addData("Goal Heading", "%.1f", goalHeading);
         telemetry.update();
     }
 
     @Override
     public void start(){
-        launcherSubsystem.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
+        //launcherSubsystem.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
         //launcherSubsystem.setIntakeAsstPower(1.0);
         waitTimer.reset();
         stuckTimer.reset();
@@ -151,20 +152,20 @@ public class RedFarOneLine extends OpMode {
 
 
         //-------------------------------SHOOTING------------------------
-        if (autoState == AutoState.SHOOT_ALIGN) {
-            double targetHeading = autoDrive.getHeadingToGoal(curX, curY, RED_GOAL_X, RED_GOAL_Y);
+       // if (autoState == AutoState.SHOOT_ALIGN) {
+            //double targetHeading = autoDrive.getHeadingToGoal(curX, curY, RED_GOAL_X, RED_GOAL_Y);
             //telemetry.addData("DEBUG Target Heading", "%.1f", targetHeading);
             //telemetry.addData("DEBUG Current H", "%.1f", curH);
-        }
+       // }
 
         switch (autoState) {
-            case POWER_UP:
-                launcherSubsystem.setLauncherVelocity(LAUNCHER_TARGET_VELOCITY);
-                autoState = AutoState.SHOOT_ALIGN;
-                break;
+           // case FORWARD:
+               // launcherSubsystem.setLauncherVelocity(LAUNCHER_TARGET_VELOCITY);
+               // autoState = AutoState.STRAFE;
+               // break;
 
-            case SHOOT_ALIGN:
-                if (autoDrive.runToPosition(curX,curY,curH,RED_FAR_SHOOT_X,RED_FAR_SHOOT_Y,RED_FAR_SHOOT_H, driveSpeedSlow, rotateSpeed)){
+           /* case FORWARD:
+                if (autoDrive.runToPosition(curX,curY,curH,RedForwardX, RedForwardY, RedForwardH, driveSpeedSlow, rotateSpeed)){
                     shotsToFire = 3;
                     launcherSubsystem.setLauncherVelocity(LAUNCHER_TARGET_VELOCITY);
                     //launcherSubsystem.setIntakeAsstPower(1.0);
@@ -199,29 +200,29 @@ public class RedFarOneLine extends OpMode {
                         autoState = returnState;
                     }
                 }
-                break;
+                break; */
 
 
                 //--------------------------------ROW PICKUP---------------------
-            case ROW1_TURN_TO_ARTIFACTS:
-                if (autoDrive.runToPosition(curX, curY, curH, RED_ROW1_SETUP_X, RED_ROW1_SETUP_Y, RED_ROW1_SETUP_H, driveSpeed, rotateSpeed)) {
-                    autoState = AutoState.ROW1_DRIVE_TO_ARTIFACTS;
+            case FORWARD:
+                if (autoDrive.runToPosition(curX, curY, curH, RedForwardX, RedForwardY, RedForwardH, driveSpeed, rotateSpeed)) {
+                    autoState = AutoState.STRAFE;
                 }
                 checkStuck(AutoState.ROW1_DRIVE_TO_ARTIFACTS);
                 break;
 
 
-            case ROW1_DRIVE_TO_ARTIFACTS:
-                launcherSubsystem.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
-                if (autoDrive.runToPosition(curX, curY, curH, RED_ROW1_PICKUP_X, RED_ROW1_PICKUP_Y, RED_ROW1_PICKUP_H, driveSpeed, rotateSpeed)) {
-                    returnState = AutoState.FINISH;
-                    autoState = AutoState.OUTTAKE_TIMER;
-                    outTakeTimer.reset();
+            case STRAFE:
+//launcherSubsystem.setIntakeVelocity(INTAKE_TARGET_VELOCITY);
+                if (autoDrive.runToPosition(curX, curY, curH, RedStrafeX, RedStrafeY, RedStrafeH, driveSpeed, rotateSpeed)) {
+                    returnState = AutoState.PARK;
+                   // autoState = AutoState.OUTTAKE_TIMER;
+                    //outTakeTimer.reset();
                 }
-                checkStuck(AutoState.OUTTAKE_TIMER);
+                // checkStuck(AutoState.OUTTAKE_TIMER);
                 break;
 
-            case OUTTAKE_TIMER:
+           /* case PARK:
                 if (outTakeTimer.seconds() < OUTTAKE_TIME) {
                     launcherSubsystem.setIntakeVelocity(OUTTAKE_VELOCITY);
                 } else {
@@ -230,12 +231,12 @@ public class RedFarOneLine extends OpMode {
                     //IntakeAsst.setPower(0);
                     autoState = AutoState.SHOOT_ALIGN;
                 }
-                break;
+                break; */
 
-            case ROW2_TURN_TO_ARTIFACTS:
-                if (autoDrive.runToPosition(curX, curY, curH, RED_ROW2_SETUP_X, RED_ROW2_SETUP_Y, RED_ROW2_SETUP_H, driveSpeed, rotateSpeed)) {
+             /* case PARK:
+                if (autoDrive.runToPosition(curX, curY, curH,RedParkX, RedParkY, RedParkH,driveSpeed, rotateSpeed)) {
 
-                    autoState = AutoState.ROW2_DRIVE_TO_ARTIFACTS;
+                    autoState = AutoState.FINISH;
                 }
                 break;
 
@@ -316,11 +317,11 @@ public class RedFarOneLine extends OpMode {
                 if(waitTimer.seconds()> waitTime){
                     autoState = returnState;
                 }
-                break;
+                break; */
 
                 //------------------------------END-------------------------
-            case FINISH:
-                if (autoDrive.runToPosition(curX, curY, curH, RED_FAR_FINISH_X, RED_FAR_FINISH_Y, RED_FAR_FINISH_H, driveSpeed, rotateSpeed)) {
+            case PARK:
+                if (autoDrive.runToPosition(curX, curY, curH, RedParkX, RedParkY, RedParkH, driveSpeed, rotateSpeed)) {
                     autoDrive.stop();
                     PoseStorage.currentX = curX;   // Use scaled X value
                     PoseStorage.currentY = curY;  // Use scaled Y value
@@ -330,19 +331,19 @@ public class RedFarOneLine extends OpMode {
         }
 
         // Debug: show errors and commands
-        double xErr = RED_FAR_SHOOT_X - curX;
-        double yErr = RED_FAR_SHOOT_Y - curY;
-        double hErr = RED_FAR_SHOOT_H - Math.toDegrees(curH);
-        while (hErr > 180) hErr -= 360;
-        while (hErr <= -180) hErr += 360;
+       // double xErr = RED_FAR_SHOOT_X - curX;
+       // double yErr = RED_FAR_SHOOT_Y - curY;
+       // double hErr = RED_FAR_SHOOT_H - Math.toDegrees(curH);
+       // while (hErr > 180) hErr -= 360;
+       // while (hErr <= -180) hErr += 360;
 
         telemetry.addData("AutoState", autoState);
-        telemetry.addData("X", "%.1f → %.1f (err: %.1f)", curX, RED_FAR_SHOOT_X, xErr);
-        telemetry.addData("Y (scaled)", "%.1f → %.1f (err: %.1f)", curY, RED_FAR_SHOOT_Y, yErr);
-        telemetry.addData("X (scaled)", "%.1f → %.1f (err: %.1f)", curX, RED_FAR_SHOOT_X, xErr);
+       // telemetry.addData("X", "%.1f → %.1f (err: %.1f)", curX, RED_FAR_SHOOT_X, xErr);
+        //telemetry.addData("Y (scaled)", "%.1f → %.1f (err: %.1f)", curY, RED_FAR_SHOOT_Y, yErr);
+        //telemetry.addData("X (scaled)", "%.1f → %.1f (err: %.1f)", curX, RED_FAR_SHOOT_X, xErr);
 
         telemetry.addData("Y (raw)", "%.1f", rawY);
-        telemetry.addData("H", "%.1f → %.1f (err: %.1f)", Math.toDegrees(curH), RED_FAR_SHOOT_H, hErr);
+       // telemetry.addData("H", "%.1f → %.1f (err: %.1f)", Math.toDegrees(curH), RED_FAR_SHOOT_H, hErr);
         telemetry.update();
     }
 
