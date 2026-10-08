@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -20,6 +21,7 @@ figure out finish position
 
 @Autonomous(name="WorkingBlueFar", group="BlueOdo")
 @Configurable
+@Disabled
 public class BlueOdoSubsystem extends OpMode {
 
     // --- DRIVE CLASS ---

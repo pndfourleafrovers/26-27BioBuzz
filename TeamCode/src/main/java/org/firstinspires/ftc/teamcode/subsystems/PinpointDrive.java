@@ -129,8 +129,8 @@ public class PinpointDrive {
         //change field velocities to make them field centric
         //double dForward = (dX * cos) + (dY * sin);
         //double dStrafe  = (-dX * sin) + (dY * cos);
-        double dForward = (dY * cos) + (dX * sin); //tried -dX
-        double dStrafe  = (-dY * sin) + (dX * cos); // tried dY
+        double dForward = (dY * cos) + (dX * sin);
+        double dStrafe  = (-dY * sin) + (dX * cos);
         double dTurn    = dH;
 
         //Updates last error

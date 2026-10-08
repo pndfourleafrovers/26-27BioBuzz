@@ -208,7 +208,7 @@ public class RedFarOneLine extends OpMode {
                 if (autoDrive.runToPosition(curX, curY, curH, RedForwardX, RedForwardY, RedForwardH, driveSpeed, rotateSpeed)) {
                     autoState = AutoState.STRAFE;
                 }
-                checkStuck(AutoState.ROW1_DRIVE_TO_ARTIFACTS);
+                checkStuck(AutoState.STRAFE);
                 break;
 
 
